@@ -1,0 +1,9 @@
+# picocad material
+newmtl truck_base_v2_mtl
+ka 1.000000 1.000000 1.000000
+kd 1.000000 1.000000 1.000000
+ks 0.000000 0.000000 0.000000
+tr 1.000000
+illum 1
+ns 0.000000
+map_kd truck_base_v2_tex.png
