@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3274943280648885494}
   - component: {fileID: 5701192653855781492}
   - component: {fileID: 835256413875854952}
+  - component: {fileID: 5724012363526520097}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -172,6 +173,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 5701192653855781492}
   m_maskType: 0
+--- !u!114 &5724012363526520097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758416841547959320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd591f881059e3d489bf6f940f4a7ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMesh: {fileID: 0}
+  gridStat: {fileID: 0}
 --- !u!1 &4355821231122698227
 GameObject:
   m_ObjectHideFlags: 0
@@ -181,8 +196,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3979261191445550409}
+  - component: {fileID: 8471569432022889256}
   m_Layer: 0
-  m_Name: tile_concrete_0
+  m_Name: wavefrontTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -205,6 +221,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8471569432022889256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4355821231122698227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff552a55588af6843b7a165f70dac320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visited: -1
+  x: 0
+  y: 0
 --- !u!1 &4755580980642658090
 GameObject:
   m_ObjectHideFlags: 0
