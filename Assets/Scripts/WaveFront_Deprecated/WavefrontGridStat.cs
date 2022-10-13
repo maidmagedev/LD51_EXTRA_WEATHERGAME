@@ -4,7 +4,7 @@ using UnityEngine;
 
 // https://www.youtube.com/watch?v=fUiNDDcU_I4&ab_channel=RandomArtAttack
 
-public class GridStat : MonoBehaviour
+public class WavefrontGridStat : MonoBehaviour
 {
     public int visited = -1;
     public int x = 0;
