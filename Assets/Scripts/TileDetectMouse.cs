@@ -15,7 +15,7 @@ public class TileDetectMouse : MonoBehaviour
         if (other.gameObject.CompareTag("Cursor"))
         {
             indicator.SetActive(true);
-            Debug.Log("test");
+            //Debug.Log("test");
         } 
     }
 

@@ -13264,6 +13264,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GridGen
       objectReference: {fileID: 0}
+    - target: {fileID: 9020495029084059016, guid: 01bb7df2cce09304c980bed55395230a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 01bb7df2cce09304c980bed55395230a, type: 3}
 --- !u!1001 &1278942379
