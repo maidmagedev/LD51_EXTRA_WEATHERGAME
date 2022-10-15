@@ -2,27 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DetectMouse : MonoBehaviour
+// This script detects if a mouse is hovering over this tile.
+// It will enable and disable the indicator if so.
+
+public class TileDetectMouse : MonoBehaviour
 {
     [SerializeField] BoxCollider col;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] GameObject indicator;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Cursor"))
         {
-            Debug.Log("HI!");
+            indicator.SetActive(true);
+            Debug.Log("test");
         } 
     }
 
@@ -30,7 +23,7 @@ public class DetectMouse : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Cursor"))
         {
-            Debug.Log("BYE");
+            indicator.SetActive(false);
         }
     }
 
