@@ -16,6 +16,7 @@ public class AStarGridCell : MonoBehaviour
     public int fCost;
     public int gCost;
     public int hCost;
+    public AStarGridCell parent;
 
     public enum BlockType
     {
