@@ -24,7 +24,17 @@ public class AStarGridCell : MonoBehaviour
         Untraversable,
     }
 
+    public int CalculateFCost()
+    {
+        fCost = gCost + hCost;
+        return fCost;
+    }
 
-
+    public void ClearCosts()
+    {
+        fCost = 0;
+        gCost = 0;
+        hCost = 0;
+    }
    
 }
