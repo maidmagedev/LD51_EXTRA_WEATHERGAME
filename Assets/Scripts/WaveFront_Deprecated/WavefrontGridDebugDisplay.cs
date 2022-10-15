@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class GridDebugDisplay : MonoBehaviour
+public class WavefrontGridDebugDisplay : MonoBehaviour
 {
     public TextMeshPro textMesh;
-    public GridStat gridStat;
+    public WavefrontGridStat gridStat;
 
     // Start is called before the first frame update
     void Start()
     {
         textMesh = GetComponent<TextMeshPro>();
-        gridStat = GetComponentInParent<GridStat>();
+        gridStat = GetComponentInParent<WavefrontGridStat>();
     }
 
     // Update is called once per frame
