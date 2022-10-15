@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.IO;
+using System.Linq;
 
 public class SGrid : MonoBehaviour
 {
@@ -9,14 +11,16 @@ public class SGrid : MonoBehaviour
     public bool wasGenerated = false;
     public bool debugAction = false;
     public GameObject[,] gridArray;
+    public char[,] gridData;
 
     [Header("Grid Settings")]
     [SerializeField] GameObject pfGridCell; // grid prefab
     [SerializeField] int rows = 10;
     [SerializeField] int columns = 10;
     [SerializeField] Vector3 startingLocation = new Vector3(0, 0, 0);
+    [SerializeField] string gridFileName = "Log.text";
 
-    
+
 
 
     private void Awake()
@@ -24,13 +28,13 @@ public class SGrid : MonoBehaviour
         if (gridArray == null)
         {
             Debug.Log("declaring new Grid Array");
-            gridArray = new GameObject[columns, rows];
+            gridArray = new GameObject[rows, columns];
         }
         if (pfGridCell != null && !wasGenerated)
         {
             CreateGrid();
-            EditorUtility.SetDirty(gameObject);
-            Debug.Log(EditorUtility.IsDirty(gameObject));
+            GetGridDataFromFile();
+            
         }
     }
 
@@ -50,10 +54,14 @@ public class SGrid : MonoBehaviour
                 for (int colIndex = 0; colIndex < columns; colIndex++)
                 {
                     GameObject gridCell = gridArray[rowIndex, colIndex];
-                    if (gridCell.GetComponent<AStarGridCell>().blockType == AStarGridCell.BlockType.Untraversable)
+                    AStarGridCell.BlockType type = gridCell.GetComponent<AStarGridCell>().blockType;
+                    if (type == AStarGridCell.BlockType.Untraversable)
                     {
-                        Debug.Log("Untraversable at [" + rowIndex + "][" + colIndex + "]");
-                        gridCell.transform.GetChild(1).gameObject.SetActive(true);
+                        //Debug.Log("Untraversable at [" + rowIndex + "][" + colIndex + "]");
+                        gridCell.transform.GetChild(4).gameObject.SetActive(true);
+                    } else if (type == AStarGridCell.BlockType.Traversable)
+                    {
+                        gridCell.transform.GetChild(4).gameObject.SetActive(false);
                     }
                 }
             }
@@ -69,11 +77,39 @@ public class SGrid : MonoBehaviour
         {
             for (int colIndex = 0; colIndex < columns; colIndex++)
             {
-                GameObject gridCell = Instantiate(pfGridCell, new Vector3(startingLocation.x + rowIndex, startingLocation.y, startingLocation.z + colIndex), Quaternion.identity);
+                GameObject gridCell = Instantiate(pfGridCell, new Vector3(startingLocation.x + colIndex, 1, startingLocation.z + rowIndex), Quaternion.identity);
                 gridCell.transform.SetParent(gameObject.transform); // Sets this created cell object as a child of this scriptholder
                 gridArray[rowIndex, colIndex] = gridCell;
             }
         }
         wasGenerated = true;
+    }
+
+    void GetGridDataFromFile()
+    {
+        string filePath = Application.streamingAssetsPath + "/Levels/" + gridFileName;
+        Debug.Log(File.ReadAllText(filePath));
+        List<string> fileLines = File.ReadAllLines(filePath).ToList();
+        
+        //string data = File.ReadAllText(filePath);
+
+        
+        for (int rowIndex = 0; rowIndex < rows; rowIndex++)
+        {
+            string data = fileLines[rowIndex];
+            for (int colIndex = 0; colIndex < columns; colIndex++)
+            {
+                //gridData[rowIndex, colIndex] = data[colIndex];
+                //Debug.Log(data[colIndex]);
+
+                if (data[colIndex] == 'x')
+                {
+                    gridArray[rowIndex, colIndex].GetComponent<AStarGridCell>().blockType = AStarGridCell.BlockType.Untraversable;
+                }
+            }
+            
+        }
+        //debugAction = true;
+        
     }
 }
