@@ -42,7 +42,7 @@ public class TileDetectMouse : MonoBehaviour
                 {
                     cell.blockType = AStarGridCell.BlockType.Traversable;
                 }
-                sGrid.debugAction = true;
+                sGrid.showUntraversable = true;
             }
         }
     }

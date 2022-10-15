@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-public class ioTest : MonoBehaviour
+public class SaveGridArrayToFile : MonoBehaviour
 {
     [SerializeField] SGrid grid;
     [SerializeField] string saveAsFileName = "Log.text";
