@@ -22,6 +22,8 @@ public class CameraSystem : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) inputDir.x = -1f;
         if (Input.GetKey(KeyCode.D)) inputDir.x = +1f;
 
+        //Input.mouse
+
         Vector3 moveDir = transform.forward * inputDir.z + transform.right * inputDir.x;
 
         float moveSpeed = 15f;
