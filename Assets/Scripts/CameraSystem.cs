@@ -1,11 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
+using Cinemachine.Editor;
+using Cinemachine.PostFX;
+using Cinemachine.Utility;
 
 // https://www.youtube.com/watch?v=pJQndtJ2rk0&ab_channel=CodeMonkey
 
 public class CameraSystem : MonoBehaviour
 {
+    [SerializeField] CinemachineVirtualCameraBase cinemachine;
+    [SerializeField] GameObject player;
+    [SerializeField] GameObject cameraSys;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +23,12 @@ public class CameraSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetButtonDown("CamSwap"))
+        {
+            Debug.Log("Moving to player");
+            cameraSys.transform.position = player.transform.position;
+        }
+
         Vector3 inputDir = new (0, 0, 0);
 
         if (Input.GetKey(KeyCode.W)) inputDir.z = +1f;
@@ -36,6 +50,6 @@ public class CameraSystem : MonoBehaviour
         float rotateSpeed = 100f;
         transform.eulerAngles += new Vector3(0, rotateDir * rotateSpeed * Time.deltaTime, 0);
 
-
+        
     }
 }
