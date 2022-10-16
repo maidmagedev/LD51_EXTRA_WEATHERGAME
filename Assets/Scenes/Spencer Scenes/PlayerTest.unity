@@ -52554,6 +52554,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42a501971f2bd6b4ca63ed6f69d26c4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMoving: 0
 --- !u!1001 &1127774820
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -80505,7 +80506,7 @@ PrefabInstance:
     - target: {fileID: 1669570242767733440, guid: 6f3893a181535af43af8b51da6159fa1,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.062
+      value: 2.1
       objectReference: {fileID: 0}
     - target: {fileID: 1669570242767733440, guid: 6f3893a181535af43af8b51da6159fa1,
         type: 3}
@@ -98608,6 +98609,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SaveToFile
+      objectReference: {fileID: 0}
+    - target: {fileID: 242080952041435186, guid: 24d17e8f43962fd418227a75046e477e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 242080952041435187, guid: 24d17e8f43962fd418227a75046e477e,
         type: 3}

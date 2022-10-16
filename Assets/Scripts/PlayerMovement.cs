@@ -7,22 +7,43 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private Vector3 startPosition;
-    private Vector3 endPosition = new Vector3(3, 1.86f, 13);
+    private Vector3 endPosition;
     private float desiredDuration = 1f;
     private float elapsedTime = 0;
+    public bool isMoving = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        startPosition = transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        elapsedTime += Time.deltaTime;
-        float percentageComplete = elapsedTime / desiredDuration;
+        if (!isMoving)
+        {
+            startPosition = transform.position;
+            endPosition = startPosition + new Vector3(1, 0, 0);
+            elapsedTime = 0;
+            Debug.Log("MovePlayer called");
 
-        transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
+            StartCoroutine(MovePlayer(1, 0, 0));
+        }
+    }
+
+    private IEnumerator MovePlayer(float x, float y, float z)
+    {
+        Debug.Log("MovePlayer Started");
+        isMoving = true;
+        while (elapsedTime < desiredDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float percentageComplete = elapsedTime / desiredDuration;
+            transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+        isMoving = false;
+        
+        Debug.Log("MovePlayer End");
     }
 }

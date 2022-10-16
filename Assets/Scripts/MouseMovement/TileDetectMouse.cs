@@ -16,6 +16,8 @@ public class TileDetectMouse : MonoBehaviour
     public void Awake()
     {
         sGrid = FindObjectOfType<SGrid>();
+        sGrid.showUntraversable = true;
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -23,7 +25,6 @@ public class TileDetectMouse : MonoBehaviour
         if (other.gameObject.CompareTag("Cursor"))
         {
             indicator.SetActive(true);
-            //Debug.Log("test");
         } 
     }
 
@@ -33,16 +34,7 @@ public class TileDetectMouse : MonoBehaviour
         {
             if (Input.GetMouseButton(0) && !lockOut && cell != null)
             {
-                StartCoroutine(lockOutTimer());
-
-                if (cell.blockType == AStarGridCell.BlockType.Traversable)
-                {
-                    cell.blockType = AStarGridCell.BlockType.Untraversable; 
-                } else if (cell.blockType == AStarGridCell.BlockType.Untraversable)
-                {
-                    cell.blockType = AStarGridCell.BlockType.Traversable;
-                }
-                sGrid.showUntraversable = true;
+                //ClickToAdjustTileBlockType();
             }
         }
     }
@@ -62,4 +54,18 @@ public class TileDetectMouse : MonoBehaviour
         lockOut = false;
     }
 
+    private void ClickToAdjustTileBlockType()
+    {
+        StartCoroutine(lockOutTimer());
+
+        if (cell.blockType == AStarGridCell.BlockType.Traversable)
+        {
+            cell.blockType = AStarGridCell.BlockType.Untraversable;
+        }
+        else if (cell.blockType == AStarGridCell.BlockType.Untraversable)
+        {
+            cell.blockType = AStarGridCell.BlockType.Traversable;
+        }
+        sGrid.showUntraversable = true;
+    }
 }
