@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private Vector3 startPosition;
     private Vector3 endPosition = new Vector3(3, 1.86f, 13);
-    private float desiredDuration = 3f;
+    private float desiredDuration = 1f;
     private float elapsedTime = 0;
 
     // Start is called before the first frame update
