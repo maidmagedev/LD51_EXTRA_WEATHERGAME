@@ -1231,52 +1231,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4623765847220458377, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.0674372
-      objectReference: {fileID: 0}
-    - target: {fileID: 4623765847263041405, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 4
-      objectReference: {fileID: 0}
     - target: {fileID: 4623765847263041407, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 1207955127}
-    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
-        type: 3}
-      propertyPath: rows
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
-        type: 3}
-      propertyPath: columns
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
-        type: 3}
-      propertyPath: pfGridCell
-      value: 
-      objectReference: {fileID: 351961536676654305, guid: 8d82c5379ad928b4090139d9d29a2670,
-        type: 3}
-    - target: {fileID: 4623765847557156715, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4623765847557156715, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4623765847557156715, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7178820532624468303, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
       propertyPath: m_Name
@@ -1295,11 +1254,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DebugTile
-      objectReference: {fileID: 0}
-    - target: {fileID: 550449191181363439, guid: 8d82c5379ad928b4090139d9d29a2670,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5007932559893767437, guid: 8d82c5379ad928b4090139d9d29a2670,
         type: 3}
