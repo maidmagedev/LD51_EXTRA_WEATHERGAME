@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] Animator animator;
+
     private Vector3 startPosition;
     private Vector3 endPosition;
     private float desiredDuration = 1f;
@@ -33,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
 
     private IEnumerator MovePlayer(float x, float y, float z)
     {
+        animator.SetTrigger("walk");
         Debug.Log("MovePlayer Started");
         isMoving = true;
         while (elapsedTime < desiredDuration)
@@ -43,7 +46,8 @@ public class PlayerMovement : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
         }
         isMoving = false;
-        
+        animator.SetTrigger("idle");
+
         Debug.Log("MovePlayer End");
     }
 }
