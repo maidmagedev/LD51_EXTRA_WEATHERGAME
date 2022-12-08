@@ -13,10 +13,18 @@ public class AStarGridCell : MonoBehaviour
 
     [Header("== A* Variables ==")]
     public double costModifier = 1.0; // This is a multiplier for cost.
-    public int fCost;
-    public int gCost;
-    public int hCost;
+    public int fCost = int.MaxValue;
+    public int gCost = int.MaxValue;
+    public int hCost = 0;
     public AStarGridCell parent;
+
+    [Header("== Pathfinding ==")]
+    // These positions are updated by SGrid.cs
+    public int x;
+    public int y;
+    public int weight; // used for the preliminary Dijkstra's variant. This file is erroneously used for Dijkstra's as of now.
+    public bool visited;
+    public List<AStarGridCell> neighbors = new List<AStarGridCell>(4);
 
     public enum BlockType
     {
@@ -32,9 +40,23 @@ public class AStarGridCell : MonoBehaviour
 
     public void ClearCosts()
     {
-        fCost = 0;
-        gCost = 0;
+        fCost = int.MaxValue;
+        gCost = int.MaxValue;
         hCost = 0;
     }
-   
+
+    
+    public double getDistToCell(AStarGridCell b)
+    {
+        // I suspect that this will have trouble with obstacles.
+        int width = Mathf.Abs(x - b.x);
+        int height = Mathf.Abs(y - b.y);
+        //return Mathf.Sqrt((width * width) + (height * height)); // pythag dist
+        return width + height; // manhattan? 
+    }
+
+    public int compareTo(AStarGridCell b)
+    {
+        return fCost - b.fCost;
+    }
 }

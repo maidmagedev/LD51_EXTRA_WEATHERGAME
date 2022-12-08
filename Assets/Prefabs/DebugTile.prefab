@@ -54,11 +54,20 @@ MonoBehaviour:
   downOpen: 1
   leftOpen: 1
   rightOpen: 1
-  costModifier: 0
-  fCost: 0
-  gCost: 0
+  costModifier: 1
+  fCost: 2147483647
+  gCost: 2147483647
   hCost: 0
   parent: {fileID: 0}
+  x: 0
+  y: 0
+  weight: 1
+  visited: 0
+  neighbors:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &550449191181363439
 GameObject:
   m_ObjectHideFlags: 0

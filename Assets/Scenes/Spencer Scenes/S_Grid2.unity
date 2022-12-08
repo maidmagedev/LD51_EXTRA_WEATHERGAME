@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028334, g: 0.22571328, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -514,7 +514,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -538,7 +538,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1207955125}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -2, y: 6.2825627, z: 0.64627266}
+  m_LocalPosition: {x: 2.27, y: 6.28, z: 1.93}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1236,6 +1236,26 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 1207955127}
+    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
+        type: 3}
+      propertyPath: x1
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
+        type: 3}
+      propertyPath: x2
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
+        type: 3}
+      propertyPath: y1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
+        type: 3}
+      propertyPath: y2
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 7178820532624468303, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
       propertyPath: m_Name
