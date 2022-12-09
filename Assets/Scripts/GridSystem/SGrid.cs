@@ -70,13 +70,13 @@ public class SGrid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
+        
         if (showUntraversable)
         {
             ShowUntraversableTiles();
             Debug.Log("Debug action complete.");
             showUntraversable = false;
-        }*/
+        }
 
         if (toggleTraversable)
         {
