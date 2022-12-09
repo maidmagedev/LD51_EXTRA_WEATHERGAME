@@ -33,6 +33,8 @@ public class SGrid : MonoBehaviour
     // second point
     public int x2;
     public int y2;
+    private List<AStarGridCell> prevPath;
+
 
     [Header("Editor Tools")]
     public bool blockOutMode = false; // used by TileDetectMouse.cs to determine if clicking on tiles will mark tiles as traversable/untraversable.
@@ -40,6 +42,8 @@ public class SGrid : MonoBehaviour
 
     public bool mouseOnHoverPathBuilding = false; // with this set to true, paths will be continuously generated to the mouse position.
                                                   // used by TileDetectMouse.cs. Will do nothing otherwise.
+
+    private bool traversableShow = false;
 
     private void Awake()
     {
@@ -52,14 +56,14 @@ public class SGrid : MonoBehaviour
         {
             CreateGrid();
             GetGridDataFromFile();
-            
+
         }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -82,6 +86,21 @@ public class SGrid : MonoBehaviour
         }
     }
 
+    public void ToggleUntraversableTileView()
+    {
+        Debug.Log("Hello!!!");
+        if (traversableShow == false)
+        {
+            HideUntraversableTiles();
+
+        }
+        else
+        {
+            ShowUntraversableTiles();
+        }
+        traversableShow = !traversableShow;
+    }
+
     // Enables all valid "untraversable" indicators.
     public void ShowUntraversableTiles()
     {
@@ -95,6 +114,27 @@ public class SGrid : MonoBehaviour
                 {
                     //Debug.Log("Untraversable at [" + rowIndex + "][" + colIndex + "]");
                     gridCell.transform.GetChild(4).gameObject.SetActive(true);
+                }
+                else if (type == AStarGridCell.BlockType.Traversable)
+                {
+                    gridCell.transform.GetChild(4).gameObject.SetActive(false);
+                }
+            }
+        }
+    }
+    
+    public void HideUntraversableTiles()
+    {
+        for (int rowIndex = 0; rowIndex < rows; rowIndex++)
+        {
+            for (int colIndex = 0; colIndex < columns; colIndex++)
+            {
+                GameObject gridCell = gridArray[colIndex, rowIndex];
+                AStarGridCell.BlockType type = gridCell.GetComponent<AStarGridCell>().blockType;
+                if (type == AStarGridCell.BlockType.Untraversable)
+                {
+                    //Debug.Log("Untraversable at [" + rowIndex + "][" + colIndex + "]");
+                    gridCell.transform.GetChild(4).gameObject.SetActive(false);
                 }
                 else if (type == AStarGridCell.BlockType.Traversable)
                 {
@@ -160,16 +200,22 @@ public class SGrid : MonoBehaviour
     // There's currently a bias to tread over previous paths when called consecutively. This bias results in a lot of valid paths returning false.
     public List<AStarGridCell> GetPath(AStarGridCell start, AStarGridCell end)
     {
-        Debug.Log("/////////////////////////////////////////////////////////////////////////////////////////////");
         Debug.Log("[--------------------------------------GetPath() Start--------------------------------------]");
-        Debug.Log("/////////////////////////////////////////////////////////////////////////////////////////////");
         // safety exit
         if (start.blockType == AStarGridCell.BlockType.Untraversable || end.blockType == AStarGridCell.BlockType.Untraversable)
         {
             Debug.Log(" ! SGrid.cs in GetPath() method : Either Start or End is of blockType untraversable.");
             return null;
         }
-
+        if (start == end)
+        {
+            Debug.Log(" ! SGrid.cs in GetPath() method : Start is same as end.");
+            return null;
+        }
+        if (prevPath != null)
+        {
+            clearPath(prevPath);
+        }
 
         List<AStarGridCell> finalPath = new();
         List<AStarGridCell> visited = new(); // we use this for cleanup, rather than in our methods. Looking for visited.contains() is redundant.
@@ -200,12 +246,13 @@ public class SGrid : MonoBehaviour
             visited.Add(currCellData);
 
             // Display Debug Text ---------------------------------------------------------------
+            /*
             gridArray[currCellData.x, currCellData.y].transform.GetChild(1).gameObject.SetActive(true);
             string text = "G: ";
             text += currCellData.gCost;
             text += "\nF: ";
             text += currCellData.fCost;
-            gridArray[currCellData.x, currCellData.y].transform.GetChild(1).GetComponent<TextMeshPro>().text = text;
+            gridArray[currCellData.x, currCellData.y].transform.GetChild(1).GetComponent<TextMeshPro>().text = text;*/
 
 
             if (currCellData == end)
@@ -256,11 +303,13 @@ public class SGrid : MonoBehaviour
                 Debug.Log("path : (" + curr.x + ", " + curr.y + ")");
                 finalPath.Add(curr);
                 gridArray[curr.x, curr.y].transform.GetChild(5).gameObject.SetActive(true);
-               
+
                 curr = curr.parent;
             }
             gridArray[start.x, start.y].transform.GetChild(1).gameObject.GetComponent<TextMeshPro>().text = "START";
+            gridArray[start.x, start.y].transform.GetChild(1).gameObject.SetActive(true);
             gridArray[end.x, end.y].transform.GetChild(1).gameObject.GetComponent<TextMeshPro>().text = "END";
+            gridArray[end.x, end.y].transform.GetChild(1).gameObject.SetActive(true);
 
         }
         else
@@ -285,11 +334,10 @@ public class SGrid : MonoBehaviour
             temp.parent = null;
             queue.deleteMin();
         }
+        awfulClean();
 
-        Debug.Log("/////////////////////////////////////////////////////////////////////////////////////////////");
         Debug.Log("[--------------------------------------GetPath()--end---------------------------------------]");
-        Debug.Log("/////////////////////////////////////////////////////////////////////////////////////////////");
-
+        prevPath = finalPath;
         return finalPath;
     }
 
@@ -365,11 +413,96 @@ public class SGrid : MonoBehaviour
         foreach (AStarGridCell cell in path)
         {
             gridArray[cell.x, cell.y].transform.GetChild(5).gameObject.SetActive(false);
+            gridArray[cell.x, cell.y].transform.GetChild(1).gameObject.SetActive(false);
+            gridArray[cell.x, cell.y].transform.GetChild(6).gameObject.SetActive(false);
+
         }
     }
 
-    public void interpretPath()
+    enum PathDir
     {
 
+    }
+        
+
+    public void InterpretPath(List<AStarGridCell> path, PlayerMovement player)
+    {
+        if (path != null && path.Count > 1)
+        {
+            Debug.Log("InterpretPath Called with path length: " + path.Count);
+
+            path.Reverse();
+            AStarGridCell prev = path.ElementAt(0);
+            // Path is guaranteed to contain at least two items.
+            int lastDir = -1; // -1 no dir | 0 horizontal (X) | 1 vertical (Y)
+            int currentDiff = 0;
+            for (int i = 1; i < path.Count; i++)
+            {
+                AStarGridCell curr = path.ElementAt(1);
+                int xDiff = curr.x - prev.x;
+                int yDiff = curr.y - prev.y;
+                
+              
+                switch(lastDir)
+                {
+                    case -1:
+                        if (xDiff != 0)
+                        {
+                            lastDir = 1;
+                        } else
+                        {
+                            lastDir = 0;
+                        }
+                        
+                        break;
+                    case 0:
+                        if (yDiff != 0)
+                        {
+                            // There is a difference in y, meaning we have a change of direction.
+                            Debug.Log("Move along X " + currentDiff + " # tiles");
+                            // Now we move along the Y axis.
+                            lastDir = 1;
+                            currentDiff = 0;
+                        } else
+                        {
+
+                        }
+                        break;
+                    case 1:
+                        if (xDiff != 0)
+                        {
+                            // There is a difference in x, meaning we have a change of direction.
+                            Debug.Log("Move along Y" + currentDiff + " # tiles");
+                            // Now we will move along the X axis.
+                            lastDir = 0;
+                            currentDiff = 0;
+                        }
+                        break;
+                }
+                currentDiff += xDiff + yDiff;
+            }
+            Debug.Log("End Diff: " + currentDiff);
+
+        }
+        else
+        {
+            Debug.Log("Path should never have less than two items if non-null.");
+        }
+
+
+    }
+
+    public void awfulClean()
+    {
+        for (int rowIndex = 0; rowIndex < rows; rowIndex++)
+        {
+            for (int colIndex = 0; colIndex < columns; colIndex++)
+            {
+
+                AStarGridCell cell = gridArray[colIndex, rowIndex].GetComponent<AStarGridCell>();
+                cell.ClearCosts();
+                
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 endPosition;
     private float desiredDuration = 1f;
     private float elapsedTime = 0;
+    bool moving = false;
     // ------------------------------------------------------------
 
     public AStarGridCell playerCurrentCell;
@@ -37,6 +38,7 @@ public class PlayerMovement : MonoBehaviour
             playerCurrentCell = grid.gridArray[startingX, startingY].GetComponent<AStarGridCell>();
         }
 
+        /*
         if (!isMoving)
         {
             startPosition = transform.position;
@@ -46,28 +48,72 @@ public class PlayerMovement : MonoBehaviour
 
             StartCoroutine(MovePlayerCoroutine(1, 0, 0));
         }
+        */
     }
 
-    public void movePlayerToCell(int x, int y)
+    public void MovePlayerDirectional(int tileCount, directions dir)
     {
-
-    }
-
-    private IEnumerator MovePlayerCoroutine(float x, float y, float z)
-    {
-        animator.SetTrigger("walk");
-        Debug.Log("MovePlayer Started");
-        isMoving = true;
-        while (elapsedTime < desiredDuration)
+        if (tileCount == 0)
         {
-            elapsedTime += Time.deltaTime;
-            float percentageComplete = elapsedTime / desiredDuration;
-            transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
+            return;
+        }
+        Vector3 newPostion = Vector3.zero;
+
+        switch(dir)
+        {
+            case directions.north:
+                newPostion = new Vector3(0, 0, tileCount);
+                break;
+            case directions.south:
+                newPostion = new Vector3(0, 0, tileCount);
+                break;
+            case directions.west:
+                newPostion = new Vector3(tileCount, 0, 0);
+                break;
+            case directions.east:
+                newPostion = new Vector3(tileCount, 0, 0);
+                break;
+         
+        }
+        startPosition = transform.position;
+        endPosition = transform.position + newPostion;
+        StartCoroutine(MovePlayerCoroutine());
+    }
+
+    public enum directions
+    {
+        north,
+        south,
+        east,
+        west
+    }
+
+    private IEnumerator MovePlayerCoroutine()
+    {
+        bool completedMovement = false;
+        while (!completedMovement)
+        {
+            if (!moving)
+            {
+                moving = true;
+                animator.SetTrigger("walk");
+                Debug.Log("MovePlayer Started");
+                isMoving = true;
+                while (elapsedTime < desiredDuration)
+                {
+                    elapsedTime += Time.deltaTime;
+                    float percentageComplete = elapsedTime / desiredDuration;
+                    transform.position = Vector3.Lerp(startPosition, endPosition, Mathf.SmoothStep(0, 1, percentageComplete));
+                    yield return new WaitForSeconds(Time.deltaTime);
+                }
+                isMoving = false;
+                animator.SetTrigger("idle");
+
+                Debug.Log("MovePlayer End");
+                moving = false;
+                completedMovement = true;
+            }
             yield return new WaitForSeconds(Time.deltaTime);
         }
-        isMoving = false;
-        animator.SetTrigger("idle");
-
-        Debug.Log("MovePlayer End");
     }
 }
