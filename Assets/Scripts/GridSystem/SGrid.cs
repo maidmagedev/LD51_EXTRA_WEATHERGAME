@@ -13,7 +13,7 @@ public class SGrid : MonoBehaviour
 {
     [Header("Grid")]
     public bool wasGenerated = false;
-    public bool showUntraversable = false;
+    public bool showUntraversable = false; // redundant maybe?
     public GameObject[,] gridArray;
     public char[,] gridData;
 
@@ -44,6 +44,7 @@ public class SGrid : MonoBehaviour
                                                   // used by TileDetectMouse.cs. Will do nothing otherwise.
 
     private bool traversableShow = false;
+    public bool toggleTraversable = false;
 
     private void Awake()
     {
@@ -69,13 +70,22 @@ public class SGrid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if (showUntraversable)
         {
             ShowUntraversableTiles();
             Debug.Log("Debug action complete.");
             showUntraversable = false;
+        }*/
+
+        if (toggleTraversable)
+        {
+            ToggleUntraversableTileView();
+            toggleTraversable = !toggleTraversable;
         }
 
+
+        // Unsure if this is still functional.
         if (testPath)
         {
             AStarGridCell initial = gridArray[x1, y1].GetComponent<AStarGridCell>();

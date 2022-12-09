@@ -13,6 +13,7 @@ public class CameraSystem : MonoBehaviour
     [SerializeField] CinemachineVirtualCameraBase cinemachine;
     [SerializeField] GameObject player;
     [SerializeField] GameObject cameraSys;
+    [SerializeField] MousePosition3D mousePosScript;
 
     // Start is called before the first frame update
     void Start()
@@ -25,8 +26,9 @@ public class CameraSystem : MonoBehaviour
     {
         if (Input.GetButtonDown("CamSwap"))
         {
-            Debug.Log("Moving to player");
-            cameraSys.transform.position = player.transform.position;
+            //Debug.Log("Moving to player");
+            //cameraSys.transform.position = player.transform.position;
+            mousePosScript.cycleCam();
         }
 
         Vector3 inputDir = new (0, 0, 0);
