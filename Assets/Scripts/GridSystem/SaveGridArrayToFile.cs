@@ -39,11 +39,11 @@ public class SaveGridArrayToFile : MonoBehaviour
         File.WriteAllText(path, "");
         File.AppendAllText(path, "");
 
-        for (int i = 0; i < grid.gridArray.GetLength(0); i++)
+        for (int rows = 0; rows < grid.gridArray.GetLength(1); rows++)
         {
-            for (int j = 0; j < grid.gridArray.GetLength(1); j++)
+            for (int columns = 0; columns < grid.gridArray.GetLength(0); columns++)
             {
-                if (grid.gridArray[i, j].GetComponent<AStarGridCell>().blockType == AStarGridCell.BlockType.Traversable)
+                if (grid.gridArray[columns, rows].GetComponent<AStarGridCell>().blockType == AStarGridCell.BlockType.Traversable)
                 {
                     File.AppendAllText(path, "o");
                 } else

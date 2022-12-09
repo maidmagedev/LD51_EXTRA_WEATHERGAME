@@ -8,20 +8,35 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] Animator animator;
 
-    private Vector3 startPosition;
+    // Used by the Lerp in MovePlayerCoroutine() ------------------
+    private Vector3 startPosition; 
     private Vector3 endPosition;
     private float desiredDuration = 1f;
     private float elapsedTime = 0;
+    // ------------------------------------------------------------
+
+    public AStarGridCell playerCurrentCell;
+    private SGrid grid;
+    [Header("SET THIS UP FOR EACH LEVEL!")]
+    public int startingX;
+    public int startingY;
+
     public bool isMoving = true;
 
     // Start is called before the first frame update
     void Start()
     {
+        grid = FindObjectOfType<SGrid>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (playerCurrentCell == null)
+        {
+            playerCurrentCell = grid.gridArray[startingX, startingY].GetComponent<AStarGridCell>();
+        }
+
         if (!isMoving)
         {
             startPosition = transform.position;
@@ -29,11 +44,16 @@ public class PlayerMovement : MonoBehaviour
             elapsedTime = 0;
             Debug.Log("MovePlayer called");
 
-            StartCoroutine(MovePlayer(1, 0, 0));
+            StartCoroutine(MovePlayerCoroutine(1, 0, 0));
         }
     }
 
-    private IEnumerator MovePlayer(float x, float y, float z)
+    public void movePlayerToCell(int x, int y)
+    {
+
+    }
+
+    private IEnumerator MovePlayerCoroutine(float x, float y, float z)
     {
         animator.SetTrigger("walk");
         Debug.Log("MovePlayer Started");

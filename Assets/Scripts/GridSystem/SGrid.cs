@@ -25,11 +25,21 @@ public class SGrid : MonoBehaviour
     [SerializeField] string gridFileName = "Log.text";
 
     [Header("Manual Path Debugging")]
+    // check this path to generate a path
     public bool testPath = false;
+    // first point
     public int x1;
     public int y1;
+    // second point
     public int x2;
     public int y2;
+
+    [Header("Editor Tools")]
+    public bool blockOutMode = false; // used by TileDetectMouse.cs to determine if clicking on tiles will mark tiles as traversable/untraversable.
+                                      // TileDetectMouse.cs has a reference of this script.
+
+    public bool mouseOnHoverPathBuilding = false; // with this set to true, paths will be continuously generated to the mouse position.
+                                                  // used by TileDetectMouse.cs. Will do nothing otherwise.
 
     private void Awake()
     {
@@ -126,7 +136,7 @@ public class SGrid : MonoBehaviour
         string filePath = Application.streamingAssetsPath + "/Levels/" + gridFileName; // change gridFileName in the serialized field to specify.
         //Debug.Log(File.ReadAllText(filePath));
         List<string> fileLines = File.ReadAllLines(filePath).ToList(); // Puts the file information into a list of strings (each containing a complete line)
-        
+
         for (int rowIndex = 0; rowIndex < rows; rowIndex++)
         {
             string data = fileLines[rowIndex]; // Grab one line from the list
@@ -135,19 +145,32 @@ public class SGrid : MonoBehaviour
                 if (data[colIndex] == 'x') // Grabs one character index from that line string
                 {
                     // Set the blocktype to the text value. 
-                    gridArray[rowIndex, colIndex].GetComponent<AStarGridCell>().blockType = AStarGridCell.BlockType.Untraversable;
+                    gridArray[colIndex, rowIndex].GetComponent<AStarGridCell>().blockType = AStarGridCell.BlockType.Untraversable;
                 }
                 // Stub line if we want to care about any other information in the file. We only care about 'x' chars rn since cells are 'o' by default.
                 // if (data[colIndex] == 'whatever else') {} 
             }
-            
-        }        
+
+        }
     }
 
     // Finds a path between two grid cells.
     // Returns an ordered list of the path.
+
+    // There's currently a bias to tread over previous paths when called consecutively. This bias results in a lot of valid paths returning false.
     public List<AStarGridCell> GetPath(AStarGridCell start, AStarGridCell end)
     {
+        Debug.Log("/////////////////////////////////////////////////////////////////////////////////////////////");
+        Debug.Log("[--------------------------------------GetPath() Start--------------------------------------]");
+        Debug.Log("/////////////////////////////////////////////////////////////////////////////////////////////");
+        // safety exit
+        if (start.blockType == AStarGridCell.BlockType.Untraversable || end.blockType == AStarGridCell.BlockType.Untraversable)
+        {
+            Debug.Log(" ! SGrid.cs in GetPath() method : Either Start or End is of blockType untraversable.");
+            return null;
+        }
+
+
         List<AStarGridCell> finalPath = new();
         List<AStarGridCell> visited = new(); // we use this for cleanup, rather than in our methods. Looking for visited.contains() is redundant.
 
@@ -163,14 +186,20 @@ public class SGrid : MonoBehaviour
 
 
         queue.insert(start);
+
         Debug.Log("inserting: (" + start.x + ", " + start.y + ")");
+        Debug.Log("?? Queue current size: " + queue.size());
+
         while (!queue.isEmpty() && !targetFound)
         {
             AStarGridCell currCellData = queue.findMin();
             queue.deleteMin();
             Debug.Log("Current Cell: (" + currCellData.x + ", " + currCellData.y + ")");
+
             currCellData.visited = true;
             visited.Add(currCellData);
+
+            // Display Debug Text ---------------------------------------------------------------
             gridArray[currCellData.x, currCellData.y].transform.GetChild(1).gameObject.SetActive(true);
             string text = "G: ";
             text += currCellData.gCost;
@@ -185,76 +214,16 @@ public class SGrid : MonoBehaviour
                 continue;
             }
 
-            // Get the gridArray object at that position
-
             // Get neighboring tiles
-            
-            currCellData.neighbors = new();
-            if (currCellData.x - 1 >= 0)
-            {
-                // west
-                Debug.Log(" // West ok.");
-                GameObject west = gridArray[currCellData.x - 1, currCellData.y];
-                //west.transform.GetChild(1).gameObject.SetActive(true);
-                //west.transform.GetChild(1).gameObject.GetComponent<TextMeshPro>().text = "WWWWWWWWW";
+            formNeighbors(currCellData);
 
-                currCellData.neighbors.Add(west.GetComponent<AStarGridCell>());
-            } else
-            {
-                Debug.Log(" // West is null.");
-            }
-            if (currCellData.x + 1 < rows)
-            {
-                // east
-                Debug.Log(" // east ok.");
-                GameObject east = gridArray[currCellData.x + 1, currCellData.y];
-                //east.transform.GetChild(1).gameObject.SetActive(true);
-                //east.transform.GetChild(1).gameObject.GetComponent<TextMeshPro>().text = "EEEEEEEEEEEEEEE";
+            Debug.Log("Current cell has " + currCellData.neighbors.Count + " neighbors.");
 
-                currCellData.neighbors.Add(east.GetComponent<AStarGridCell>());
-
-            }
-            else
-            {
-                Debug.Log(" // East is null.");
-            }
-            if (currCellData.y - 1 >= 0)
-            {
-                // south
-                Debug.Log(" // south ok");
-                
-                GameObject south = gridArray[currCellData.x, currCellData.y - 1];
-                //south.transform.GetChild(1).gameObject.SetActive(true);
-                //south.transform.GetChild(1).GetComponent<TextMeshPro>().text = "SSSSSSSSSSSSSSS";
-                
-                currCellData.neighbors.Add(south.GetComponent<AStarGridCell>());
-
-            }
-            else
-            {
-                Debug.Log(" // South is null.");
-            }
-            if (currCellData.y + 1 < columns)
-            {
-                // north
-                Debug.Log(" // north ok");
-                GameObject north = gridArray[currCellData.x, currCellData.y + 1];
-                //north.transform.GetChild(1).gameObject.SetActive(true);
-                //north.transform.GetChild(1).gameObject.GetComponent<TextMeshPro>().text = "NNNNNNNNNNNN";
-
-                currCellData.neighbors.Add(north.GetComponent<AStarGridCell>());
-
-            }
-            else
-            {
-                Debug.Log(" // North is null.");
-            }
-
+            // Get (fcost) distance of neighbors, if it's lower than known, overwrite it.
             foreach (AStarGridCell neighborCellData in currCellData.neighbors)
             {
                 if (!neighborCellData.visited && neighborCellData.blockType == AStarGridCell.BlockType.Traversable)
                 {
-                    Debug.Log(" - neighbor: (" + neighborCellData.x + ", " + neighborCellData.y + ") added to the queue");
                     int cost = currCellData.fCost + neighborCellData.weight;
                     if (cost < neighborCellData.fCost)
                     {
@@ -263,10 +232,14 @@ public class SGrid : MonoBehaviour
                         neighborCellData.parent = currCellData;
 
                         queue.insert(neighborCellData);
+                        Debug.Log(" - neighbor: (" + neighborCellData.x + ", " + neighborCellData.y + ") added to the queue");
+                    } else
+                    {
+                        Debug.Log(" - neighbor: (" + neighborCellData.x + ", " + neighborCellData.y + ") Not added to the queue, size is lesser.");
                     }
                 } else
                 {
-                    Debug.Log(" - neighbor: (" + neighborCellData.x + ", " + neighborCellData.y + ") NOT added to the queue");
+                    Debug.Log(" - neighbor: (" + neighborCellData.x + ", " + neighborCellData.y + ") NOT Traversable, or was Visited");
                 }
             }
 
@@ -274,28 +247,17 @@ public class SGrid : MonoBehaviour
         }
 
 
-
-        // reset all as unvisited
-        foreach (AStarGridCell item in visited)
-        {
-            item.visited = false;
-            item.ClearCosts();
-        }
-
+        // Found the Destination
         if (targetFound)
         {
             AStarGridCell curr = end;
-            int i = 0;
             while (curr != null)
             {
                 Debug.Log("path : (" + curr.x + ", " + curr.y + ")");
                 finalPath.Add(curr);
-                gridArray[curr.x, curr.y].transform.GetChild(3).gameObject.SetActive(true);
-                string text = "path ";
-                text += i;
-                //gridArray[curr.x, curr.y].transform.GetChild(1).gameObject.GetComponent<TextMeshPro>().text = text;
+                gridArray[curr.x, curr.y].transform.GetChild(5).gameObject.SetActive(true);
+               
                 curr = curr.parent;
-                i++;
             }
             gridArray[start.x, start.y].transform.GetChild(1).gameObject.GetComponent<TextMeshPro>().text = "START";
             gridArray[end.x, end.y].transform.GetChild(1).gameObject.GetComponent<TextMeshPro>().text = "END";
@@ -306,6 +268,108 @@ public class SGrid : MonoBehaviour
             Debug.Log("Target not found");
         }
 
+        // reset all as unvisited
+        foreach (AStarGridCell item in visited)
+        {
+            item.visited = false;
+            item.ClearCosts();
+            item.parent = null;
+        }
+
+        while (!queue.isEmpty())
+        {
+            // clean the queue, these were never visited.
+            AStarGridCell temp = queue.findMin();
+            Debug.Log("Queue Dump: (" + temp.x + ", " + temp.y + ")");
+            temp.ClearCosts();
+            temp.parent = null;
+            queue.deleteMin();
+        }
+
+        Debug.Log("/////////////////////////////////////////////////////////////////////////////////////////////");
+        Debug.Log("[--------------------------------------GetPath()--end---------------------------------------]");
+        Debug.Log("/////////////////////////////////////////////////////////////////////////////////////////////");
+
         return finalPath;
+    }
+
+    // Helper method for GetPath(). Returns neighboring North, South, East and West cells.
+    private void formNeighbors(AStarGridCell currCellData)
+    {
+        currCellData.neighbors = new();
+        if (currCellData.x - 1 >= 0)
+        {
+            // west
+            //Debug.Log(" // West ok.");
+            GameObject west = gridArray[currCellData.x - 1, currCellData.y];
+            //west.transform.GetChild(1).gameObject.SetActive(true);
+            //west.transform.GetChild(1).gameObject.GetComponent<TextMeshPro>().text = "WWWWWWWWW";
+
+            currCellData.neighbors.Add(west.GetComponent<AStarGridCell>());
+        }
+        else
+        {
+            Debug.Log(" // West is out of bounds.");
+        }
+        if (currCellData.x + 1 < columns)
+        {
+            // east
+            //Debug.Log(" // east ok.");
+            GameObject east = gridArray[currCellData.x + 1, currCellData.y];
+            //east.transform.GetChild(1).gameObject.SetActive(true);
+            //east.transform.GetChild(1).gameObject.GetComponent<TextMeshPro>().text = "EEEEEEEEEEEEEEE";
+
+            currCellData.neighbors.Add(east.GetComponent<AStarGridCell>());
+
+        }
+        else
+        {
+            Debug.Log(" // East is out of bounds.");
+        }
+        if (currCellData.y - 1 >= 0)
+        {
+            // south
+            //Debug.Log(" // south ok");
+
+            GameObject south = gridArray[currCellData.x, currCellData.y - 1];
+            //south.transform.GetChild(1).gameObject.SetActive(true);
+            //south.transform.GetChild(1).GetComponent<TextMeshPro>().text = "SSSSSSSSSSSSSSS";
+
+            currCellData.neighbors.Add(south.GetComponent<AStarGridCell>());
+
+        }
+        else
+        {
+            Debug.Log(" // South is out of bounds.");
+        }
+        if (currCellData.y + 1 < rows)
+        {
+            // north
+            //Debug.Log(" // north ok");
+            GameObject north = gridArray[currCellData.x, currCellData.y + 1];
+            //north.transform.GetChild(1).gameObject.SetActive(true);
+            //north.transform.GetChild(1).gameObject.GetComponent<TextMeshPro>().text = "NNNNNNNNNNNN";
+
+            currCellData.neighbors.Add(north.GetComponent<AStarGridCell>());
+
+        }
+        else
+        {
+            Debug.Log(" // North is out of bounds.");
+        }
+    }
+
+
+    public void clearPath(List<AStarGridCell> path)
+    {
+        foreach (AStarGridCell cell in path)
+        {
+            gridArray[cell.x, cell.y].transform.GetChild(5).gameObject.SetActive(false);
+        }
+    }
+
+    public void interpretPath()
+    {
+
     }
 }

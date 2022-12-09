@@ -50810,8 +50810,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1085657525}
-  m_LocalRotation: {x: 0.22918054, y: -0.0000000083742036, z: 0.0000000019716833,
-    w: 0.97338396}
+  m_LocalRotation: {x: 0.22918054, y: 0.000000008374211, z: -0.0000000019716846, w: 0.97338396}
   m_LocalPosition: {x: 0, y: 5.09, z: -10.210003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -52555,6 +52554,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 2085061240}
+  playerCurrentCell: {fileID: 0}
+  startingX: 2
+  startingY: 13
   isMoving: 1
 --- !u!1001 &1127774820
 PrefabInstance:
@@ -77884,7 +77886,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1650406134
 Transform:
   m_ObjectHideFlags: 0
@@ -79179,26 +79181,26 @@ PrefabInstance:
         type: 3}
       propertyPath: mainCamera
       value: 
-      objectReference: {fileID: 1085657527}
+      objectReference: {fileID: 1739586313}
     - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
       propertyPath: x1
-      value: 5
+      value: 43
       objectReference: {fileID: 0}
     - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
       propertyPath: x2
-      value: 7
+      value: 43
       objectReference: {fileID: 0}
     - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
       propertyPath: y1
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
       propertyPath: y2
-      value: 10
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
@@ -79214,6 +79216,11 @@ PrefabInstance:
         type: 3}
       propertyPath: gridFileName
       value: Level_01.text
+      objectReference: {fileID: 0}
+    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
+        type: 3}
+      propertyPath: mouseOnHoverPathBuilding
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7178820532624468303, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
@@ -81284,7 +81291,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1739586310}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
   m_BackGroundColor: {r: 0, g: 0.39189196, b: 1, a: 0}
@@ -83122,8 +83129,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1781864665}
-  m_LocalRotation: {x: 0.22918054, y: -0.0000000083742036, z: 0.0000000019716833,
-    w: 0.97338396}
+  m_LocalRotation: {x: 0.22918054, y: 0.000000008374211, z: -0.0000000019716846, w: 0.97338396}
   m_LocalPosition: {x: 0, y: 5.09, z: -10.210003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

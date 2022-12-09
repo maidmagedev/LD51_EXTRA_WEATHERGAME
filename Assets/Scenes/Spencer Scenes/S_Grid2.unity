@@ -1239,22 +1239,22 @@ PrefabInstance:
     - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
       propertyPath: x1
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
-        type: 3}
-      propertyPath: x2
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
-        type: 3}
-      propertyPath: y1
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
-      propertyPath: y2
+      propertyPath: x2
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
+        type: 3}
+      propertyPath: y1
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4623765847557156714, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
+        type: 3}
+      propertyPath: y2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7178820532624468303, guid: a11f9f2386ee4e84fa5744a0ebb0c895,
         type: 3}
